@@ -1,0 +1,57 @@
+<html>
+   <head>
+      <title>Country Example</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   </head>
+   <body>
+      <form name="testForm" id="basicForm" >
+         <div class="form-group">
+           <label for="exampleInputEmail1">Email address</label>
+           <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+           <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+         </div>
+         <div class="form-group">
+           <label for="exampleInputPassword1">Password</label>
+           <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+         </div>
+ 
+         <button id="submit" type="submit" class="btn btn-primary">Signup</button>
+       </form>
+   </body>
+
+   
+   <script>  
+      $("button").click(function (e) { 
+         e.preventDefault();
+         sendRequest($("#email").val(), $("#password").val(),$(".check:checked").serialize());
+         validation();
+        });
+      
+         function validation(){              
+          var email = document.forms["testForm"]["email"].value;
+          var password = document.forms["testForm"]["password"].value;
+         if (email == "") {
+            window.alert("Please enter a valid e-mail address.");
+          return false;
+    }
+         if (password == "") {
+            window.alert("Please enter your password");
+          return false;
+         }
+        }
+
+      function sendRequest(email, password) {
+         $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:5000/signup",
+            data: {'username': email, 'password': password},
+         success: function (response) {
+            if (response["status"]=="ok"){
+            window.location.href="login.html";}
+               },
+         });
+      };
+</script>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>BUZZ CAR RENTALS</title>
+
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+      <h1>BUZZ CAR RENTALS</h1>
+    <table class="table table-bordered table-striped table-hover" id="mytable" style="display:all">
+        <thead>
+           <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Car Name</th>
+              <th scope="col">Description</th>
+              
+           </tr>
+        </thead>
+        <tbody>
+           
+        </tbody>
+     </table>
+
+</body>
+<script>
+    $("button").click(function (e) { 
+         e.preventDefault();
+         sendRequest($("#title").val(), $("#description").val());
+         
+      });
+      function sendRequest(title,description) {
+    $.ajax({
+        type: "POST",
+        url: 'http://127.0.0.1:5000/carsdata',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        },
+        data:{"title":title,"description":description},
+        success: function (response) {
+               console.log(response);
+
+               
+               
+            },
+    });
+};
+$.ajax({
+   url: "http://127.0.0.1:5000/carsdata",
+   success: function (response) {
+      response.forEach(row => {
+        Description = row['desc'];
+        id=row['id'];
+        Name=row['title'];
+      
+
+        $("tbody").append('<tr><td>'+id+'</td><td>'+Name+'</td><td>'+Description+'</td><td><a><input type=button onclick="book('+id+')" class=btn btn-info value=Book_Now></a></td></tr>');
+        
+
+        
+     });
+     
+   },
+});
+function book(id){
+    $.ajax({
+        type:"POST",
+        url:"http://127.0.0.1:5000/carsdata/"+id+"",
+        success:function(response){
+            if (response["status"]=='ok')
+               window.location.href = "bookings.html"; 
+        }
+    })
+}
+</script>
+
+</html>
